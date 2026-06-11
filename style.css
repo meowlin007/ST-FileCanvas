@@ -1,11 +1,19 @@
-/* Mobile Optimizer Pro v2.0 - Complete Stylesheet */
+/* Mobile Optimizer Pro v2.1 - Complete Stylesheet */
+/* Supports: All Core Features, Themes, Keyboard Control, Responsive */
 
-/* ─── Base Container ──────────────────────────────────────────────────────────── */
+/* ── Base Container ──────────────────────────────────────────────────────────── */
 .mop-settings {
   padding: 16px;
   max-width: 800px;
   margin: 0 auto;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+.mop-settings *,
+.mop-settings *::before,
+.mop-settings *::after {
+  box-sizing: inherit;
 }
 
 .mop-header {
@@ -39,7 +47,6 @@
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
-
 .mop-section h4 {
   margin: 0 0 12px 0;
   font-size: 16px;
@@ -47,13 +54,14 @@
   color: #4a9eff;
 }
 
-.mop-hint {  margin: 4px 0 0 0;
+.mop-hint {
+  margin: 4px 0 0 0;
   font-size: 12px;
   color: #888;
   padding-left: 24px;
 }
 
-/* ─── Toggle & Checkbox ───────────────────────────────────────────────────────── */
+/* ─── Toggle & Checkbox ──────────────────────────────────────────────────────── */
 .mop-toggle-label {
   display: flex;
   align-items: center;
@@ -74,17 +82,21 @@
   margin-bottom: 16px;
 }
 
+.mop-setting-item:last-child {
+  margin-bottom: 0;
+}
+
 .mop-setting-item label {
   display: flex;
   align-items: center;
   cursor: pointer;
   font-size: 14px;
+  flex-wrap: wrap;
 }
 
 .mop-label-text {
   margin-right: 12px;
-  font-size: 14px;
-}
+  font-size: 14px;}
 
 /* ─── Slider ──────────────────────────────────────────────────────────────────── */
 .mop-slider {
@@ -92,11 +104,13 @@
   margin: 0 12px;
   accent-color: #4a9eff;
   height: 6px;
+  min-width: 100px;
 }
 
 .mop-slider-value {
   min-width: 30px;
-  text-align: center;  font-weight: 600;
+  text-align: center;
+  font-weight: 600;
   color: #4a9eff;
 }
 
@@ -131,8 +145,7 @@
 
 /* ─── Extension List ──────────────────────────────────────────────────────────── */
 .mop-ext-controls {
-  display: flex;
-  gap: 8px;
+  display: flex;  gap: 8px;
   margin-bottom: 12px;
   flex-wrap: wrap;
 }
@@ -145,7 +158,8 @@
   padding: 8px;
 }
 
-.mop-ext-item {  display: flex;
+.mop-ext-item {
+  display: flex;
   align-items: center;
   padding: 8px;
   margin-bottom: 4px;
@@ -180,7 +194,6 @@
   padding: 20px;
   color: #888;
 }
-
 /* ─── Per-Chat Settings ───────────────────────────────────────────────────────── */
 .mop-chat-overrides {
   margin-top: 12px;
@@ -194,7 +207,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 12px;  flex-wrap: wrap;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
 }
 
 .mop-chat-name {
@@ -215,6 +229,7 @@
   display: flex;
   align-items: center;
   font-size: 13px;
+  flex-wrap: wrap;
 }
 
 /* ─── Theme Support ───────────────────────────────────────────────────────────── */
@@ -229,7 +244,6 @@
   gap: 12px;
   flex-wrap: wrap;
 }
-
 /* ─── Buttons ─────────────────────────────────────────────────────────────────── */
 .mop-btn {
   padding: 10px 20px;
@@ -243,7 +257,8 @@
 
 .mop-btn-sm {
   padding: 6px 12px;
-  font-size: 12px;}
+  font-size: 12px;
+}
 
 .mop-btn-primary {
   background: #4a9eff;
@@ -254,6 +269,10 @@
   background: #3a8eef;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(74, 158, 255, 0.3);
+}
+
+.mop-btn-primary:active {
+  transform: translateY(0);
 }
 
 .mop-btn-secondary {
@@ -273,8 +292,7 @@
 }
 
 /* ─── Scrollbar ───────────────────────────────────────────────────────────────── */
-.mop-ext-list::-webkit-scrollbar {
-  width: 8px;
+.mop-ext-list::-webkit-scrollbar {  width: 8px;
 }
 
 .mop-ext-list::-webkit-scrollbar-track {
@@ -292,7 +310,8 @@
 }
 
 /* ─── Lazy Load Profile Animation ─────────────────────────────────────────────── */
-.mop-lazy-profile img {  opacity: 0;
+.mop-lazy-profile img {
+  opacity: 0;
   transition: opacity 0.3s ease-in-out;
 }
 
@@ -300,12 +319,78 @@
   opacity: 1;
 }
 
+/* ─── Keyboard & Viewport Fixes ───────────────────────────────────────────────── */
+.mop-viewport-locked {
+  position: fixed !important;
+  width: 100% !important;
+  height: 100vh !important;
+  overflow: hidden !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+.mop-keyboard-fix #send_form,
+.mop-keyboard-fix #chat {
+  position: relative !important;
+}
+
+body.mop-viewport-locked::after {
+  content: '';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  background: transparent;  pointer-events: none;
+  z-index: -1;
+}
+
+body.mop-viewport-locked #send_form {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 1000 !important;
+  background: inherit !important;
+}
+
+body.mop-viewport-locked #chat {
+  margin-bottom: 0 !important;
+  padding-bottom: 80px !important;
+}
+
+/* Prevent Keyboard Shift Mode */
+body.mop-prevent-shift {
+  position: fixed !important;
+  width: 100% !important;
+}
+
+body.mop-prevent-shift #send_form {
+  position: relative !important;
+  bottom: auto !important;
+}
+
+body.mop-prevent-shift #chat {
+  margin-bottom: auto !important;
+  padding-bottom: 20px !important;
+}
+
+body.mop-prevent-shift input:focus,
+body.mop-prevent-shift textarea:focus {
+  scroll-margin-bottom: 0 !important;
+}
+
+/* ─── Auto-focus Prevention ───────────────────────────────────────────────────── */
+body.mop-no-auto-focus #send_textarea:focus,
+body.mop-no-auto-focus #send_form input:focus {
+  outline: none;
+}
+
 /* ─── Responsive Design ───────────────────────────────────────────────────────── */
 @media (max-width: 600px) {
   .mop-settings {
     padding: 12px;
   }
-
   .mop-header h3 {
     font-size: 18px;
   }
@@ -341,7 +426,8 @@ body.dark .mop-settings {
 body.dark-theme .mop-section,
 body.dark .mop-section {
   background: rgba(0, 0, 0, 0.2);
-  border-color: rgba(255, 255, 255, 0.1);}
+  border-color: rgba(255, 255, 255, 0.1);
+}
 
 /* ─── Light Theme Support ─────────────────────────────────────────────────────── */
 body.light-theme .mop-settings,
@@ -354,7 +440,6 @@ body.light .mop-section {
   background: rgba(0, 0, 0, 0.02);
   border-color: rgba(0, 0, 0, 0.1);
 }
-
 body.light-theme .mop-section h4,
 body.light .mop-section h4 {
   color: #2563eb;
@@ -375,6 +460,21 @@ body.light .mop-btn-primary:hover {
   background: #1d4ed8;
 }
 
+body.light-theme .mop-hint,
+body.light .mop-hint {
+  color: #666;
+}
+
+body.light-theme .mop-ext-item,
+body.light .mop-ext-item {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+body.light-theme .mop-ext-item:hover,
+body.light .mop-ext-item:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
 /* ─── AMOLED Theme Support ────────────────────────────────────────────────────── */
 body.amoled-theme .mop-settings,
 body.amoled .mop-settings {
@@ -388,9 +488,19 @@ body.amoled .mop-section {
 }
 
 body.amoled-theme .mop-header,
-body.amoled .mop-header {
-  border-bottom-color: #222;
+body.amoled .mop-header {  border-bottom-color: #222;
 }
+
+body.amoled-theme .mop-ext-item,
+body.amoled .mop-ext-item {
+  background: #111;
+}
+
+body.amoled-theme .mop-ext-item:hover,
+body.amoled .mop-ext-item:hover {
+  background: #1a1a1a;
+}
+
 /* ─── Performance Indicator Colors ────────────────────────────────────────────── */
 #mop-device-perf {
   transition: color 0.3s;
@@ -416,4 +526,53 @@ body.amoled .mop-header {
 
 .mop-loading {
   animation: mop-pulse 1.5s ease-in-out infinite;
+}
+
+/* ─── Floating Button (Backup Style) ──────────────────────────────────────────── */
+#mop-floating-btn {
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#mop-floating-btn:active {
+  transform: scale(0.95) !important;
+}
+/* ─── Utility Classes ─────────────────────────────────────────────────────────── */
+.mop-no-anim * {
+  animation: none !important;
+  transition: none !important;
+}
+
+.mop-hide-avatars .avatar,
+.mop-hide-avatars .mes_avatar {
+  display: none !important;
+}
+
+.mes.mop-archived {
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  contain: strict !important;
+}
+
+/* ─── Mobile Safari Specific ──────────────────────────────────────────────────── */
+@supports (-webkit-touch-callout: none) {
+  .mop-viewport-locked {
+    height: -webkit-fill-available !important;
+  }
+  
+  .mop-settings {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ─── Chrome/Safari Scroll Fix ────────────────────────────────────────────────── */
+#chat.mop-optimized {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  contain: strict;
+  transform: translate3d(0,0,0);
 }
