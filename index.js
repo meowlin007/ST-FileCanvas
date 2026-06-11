@@ -325,15 +325,73 @@
 
   // ─── Viewport Lock ───────────────────────────────────────────────────────────
   function setupViewportLock() {
-    if (!settings.lockViewport || !window.visualViewport) return;
-
-    const handleResize = () => {
-      const isKeyboardOpen = window.visualViewport.height < window.innerHeight * 0.8;
-      document.body.classList.toggle('mop-viewport-locked', isKeyboardOpen);
-    };
-
-    window.visualViewport.addEventListener('resize', handleResize);
+  if (!settings.lockViewport) {
+    document.body.classList.remove('mop-viewport-locked');
+    document.body.style.height = '';
+    document.body.style.overflow = '';
+    return;
   }
+
+  const visualViewport = window.visualViewport;
+  
+  if (!visualViewport) {
+    // Fallback สำหรับเบราว์เซอร์เก่า
+    document.body.classList.add('mop-keyboard-fix');
+    return;
+  }
+
+  let lastHeight = visualViewport.height;
+  let keyboardOpen = false;
+
+  const handleResize = () => {
+    const currentHeight = visualViewport.height;
+    const windowHeight = window.innerHeight;
+    const viewportHeight = visualViewport.height;
+    
+    // ตรวจจับว่าแป้นพิมพ์เปิดหรือไม่
+    const isKeyboardOpen = viewportHeight < windowHeight * 0.75;
+    
+    if (isKeyboardOpen !== keyboardOpen) {
+      keyboardOpen = isKeyboardOpen;
+      
+      if (keyboardOpen) {
+        // แป้นพิมพ์เปิด
+        document.body.classList.add('mop-viewport-locked');
+        document.body.style.height = `${viewportHeight}px`;
+        document.body.style.overflow = 'hidden';
+        
+        // เลื่อนลงล่างสุด
+        setTimeout(() => {
+          const chat = document.getElementById('chat');
+          if (chat) {
+            chat.scrollTop = chat.scrollHeight;
+          }
+          window.scrollTo(0, 0);
+        }, 100);
+      } else {
+        // แป้นพิมพ์ปิด
+        document.body.classList.remove('mop-viewport-locked');
+        document.body.style.height = '';
+        document.body.style.overflow = '';
+      }
+    }
+    
+    lastHeight = currentHeight;
+  };
+
+  // ลบ event listener เก่า
+  if (window.mopViewportHandler) {
+    visualViewport.removeEventListener('resize', window.mopViewportHandler);
+  }
+  
+  // เพิ่ม event listener ใหม่
+  visualViewport.addEventListener('resize', handleResize);
+  visualViewport.addEventListener('scroll', handleResize);
+  window.mopViewportHandler = handleResize;
+  
+  // เรียกครั้งแรก
+  handleResize();
+}
 
   // ─── DOM Virtualization ──────────────────────────────────────────────────────
   function virtualizeChat() {
