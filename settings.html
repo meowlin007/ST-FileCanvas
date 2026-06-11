@@ -73,6 +73,22 @@
 
     <div class="mop-setting-item">
       <label>
+        <input type="checkbox" id="mop-prevent-shift" class="mop-checkbox">
+        <span>Prevent Keyboard Shift (No Lag Mode)</span>
+      </label>
+      <p class="mop-hint">ไม่เลื่อนช่องพิมพ์ขึ้นเมื่อแป้นพิมพ์เปิด - ลดการแล็ค แต่ช่องพิมพ์อาจถูกบัง</p>
+    </div>
+
+    <div class="mop-setting-item">
+  <label>
+    <input type="checkbox" id="mop-auto-show-keyboard" class="mop-checkbox">
+    <span>Auto-show Keyboard on Chat Load</span>
+  </label>
+  <p class="mop-hint">เปิด = คีย์บอร์ดเด้งขึ้นมาเองเมื่อเข้าแชท | ปิด = ต้องกดช่องพิมพ์เองเท่านั้น</p>
+    </div>
+
+    <div class="mop-setting-item">
+      <label>
         <input type="checkbox" id="mop-strip-animations" class="mop-checkbox">
         <span>Disable Animations & Transitions</span>
       </label>
@@ -88,15 +104,15 @@
 
     <div class="mop-setting-item">
       <label>
-        <input type="checkbox" id="mop-lazy-load" class="mop-checkbox">
-        <span>Enforce Lazy Loading for Images</span>
+        <input type="checkbox" id="mop-lazy-load" class="mop-checkbox">        <span>Enforce Lazy Loading for Images</span>
       </label>
     </div>
 
     <div class="mop-setting-item">
       <label>
         <input type="checkbox" id="mop-lazy-profile" class="mop-checkbox">
-        <span>Lazy Load Profile/Avatar Images</span>      </label>
+        <span>Lazy Load Profile/Avatar Images</span>
+      </label>
       <p class="mop-hint">Load profile pictures only when visible</p>
     </div>
   </div>
@@ -137,14 +153,14 @@
       </div>
       
       <div class="mop-chat-setting">
-        <label>
-          <span>Override Threshold:</span>
+        <label>          <span>Override Threshold:</span>
           <input type="range" id="mop-chat-threshold" min="5" max="30" value="12" class="mop-slider">
           <span id="mop-chat-threshold-value" class="mop-slider-value">12</span>
         </label>
       </div>
     </div>
   </div>
+
   <!-- Theme Support -->
   <div class="mop-section">
     <h4>🎨 Theme Support</h4>
@@ -186,19 +202,19 @@
     </div>
   </div>
 
-  <!-- Export/Import -->
-  <div class="mop-section">
+  <!-- Export/Import -->  <div class="mop-section">
     <h4>💾 Export / Import Settings</h4>
     
     <div class="mop-export-import">
       <button id="mop-export" class="mop-btn mop-btn-secondary">📤 Export Settings</button>
       <button id="mop-import" class="mop-btn mop-btn-secondary">📥 Import Settings</button>
       <input type="file" id="mop-import-file" accept=".json" style="display:none;">
-    </div>  </div>
+    </div>
+  </div>
 
   <!-- Action Buttons -->
   <div class="mop-section mop-actions">
     <button id="mop-apply" class="mop-btn mop-btn-primary">✅ Apply Settings</button>
     <button id="mop-reset" class="mop-btn mop-btn-secondary">🔄 Reset to Defaults</button>
   </div>
-</div>
+  </div>
