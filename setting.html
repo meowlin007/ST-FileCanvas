@@ -1,0 +1,204 @@
+<div id="mobile_optimizer_pro_settings" class="mop-settings">
+  <div class="mop-header">
+    <h3>📱 Mobile Optimizer Pro</h3>
+    <span class="mop-version">v2.0.0</span>
+  </div>
+
+  <!-- Main Toggle -->
+  <div class="mop-section">
+    <label class="mop-toggle-label">
+      <input type="checkbox" id="mop-enabled" class="mop-checkbox">
+      <span class="mop-toggle-text">Enable Mobile Optimizer</span>
+    </label>
+    <p class="mop-hint">Master switch for all optimizations</p>
+  </div>
+
+  <!-- Performance Stats -->
+  <div class="mop-section mop-stats">
+    <h4>📊 Real-time Performance</h4>
+    <div class="mop-stats-grid">
+      <div class="mop-stat-item">
+        <span class="mop-stat-label">DOM Nodes:</span>
+        <span id="mop-dom-count" class="mop-stat-value">0</span>
+      </div>
+      <div class="mop-stat-item">
+        <span class="mop-stat-label">Archived Msgs:</span>
+        <span id="mop-archived-count" class="mop-stat-value">0</span>
+      </div>
+      <div class="mop-stat-item">
+        <span class="mop-stat-label">Memory Saved:</span>
+        <span id="mop-memory-saved" class="mop-stat-value">0 MB</span>
+      </div>
+      <div class="mop-stat-item">
+        <span class="mop-stat-label">Device Performance:</span>
+        <span id="mop-device-perf" class="mop-stat-value">-</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core Settings -->
+  <div class="mop-section">
+    <h4>⚙️ Core Optimization</h4>
+    
+    <div class="mop-setting-item">
+      <label>
+        <input type="checkbox" id="mop-auto-detect" class="mop-checkbox">
+        <span>Auto-detect Device Performance</span>
+      </label>
+      <p class="mop-hint">Automatically adjust threshold based on device speed</p>
+    </div>
+    <div class="mop-setting-item">
+      <label>
+        <input type="checkbox" id="mop-virtualize" class="mop-checkbox">
+        <span>Smart Message Virtualization</span>
+      </label>
+      <p class="mop-hint">Archive old messages to reduce DOM load</p>
+    </div>
+
+    <div class="mop-setting-item">
+      <label>
+        <span class="mop-label-text">Messages to Keep Visible:</span>
+        <input type="range" id="mop-threshold" min="5" max="30" value="12" class="mop-slider">
+        <span id="mop-threshold-value" class="mop-slider-value">12</span>
+      </label>
+    </div>
+
+    <div class="mop-setting-item">
+      <label>
+        <input type="checkbox" id="mop-lock-viewport" class="mop-checkbox">
+        <span>Lock Viewport on Keyboard Open</span>
+      </label>
+      <p class="mop-hint">Prevents black screen/lag when keyboard appears</p>
+    </div>
+
+    <div class="mop-setting-item">
+      <label>
+        <input type="checkbox" id="mop-strip-animations" class="mop-checkbox">
+        <span>Disable Animations & Transitions</span>
+      </label>
+    </div>
+
+    <div class="mop-setting-item">
+      <label>
+        <input type="checkbox" id="mop-hide-avatars" class="mop-checkbox">
+        <span>Hide Avatars</span>
+      </label>
+      <p class="mop-hint">Reduces image loading overhead</p>
+    </div>
+
+    <div class="mop-setting-item">
+      <label>
+        <input type="checkbox" id="mop-lazy-load" class="mop-checkbox">
+        <span>Enforce Lazy Loading for Images</span>
+      </label>
+    </div>
+
+    <div class="mop-setting-item">
+      <label>
+        <input type="checkbox" id="mop-lazy-profile" class="mop-checkbox">
+        <span>Lazy Load Profile/Avatar Images</span>      </label>
+      <p class="mop-hint">Load profile pictures only when visible</p>
+    </div>
+  </div>
+
+  <!-- Extension Manager -->
+  <div class="mop-section">
+    <h4>🧩 Extension CSS Optimizer</h4>
+    <p class="mop-hint">Select which extensions to optimize (disable heavy CSS)</p>
+    
+    <div class="mop-ext-controls">
+      <button id="mop-select-all" class="mop-btn mop-btn-sm">Select All</button>
+      <button id="mop-select-none" class="mop-btn mop-btn-sm">Select None</button>
+      <button id="mop-refresh-ext" class="mop-btn mop-btn-sm">🔄 Refresh List</button>
+    </div>
+
+    <div id="mop-ext-list" class="mop-ext-list">
+      <div class="mop-loading">Loading extensions...</div>
+    </div>
+  </div>
+
+  <!-- Per-Chat Settings -->
+  <div class="mop-section">
+    <h4>💬 Per-Chat Settings</h4>
+    <p class="mop-hint">Override settings for specific chats</p>
+    
+    <div class="mop-setting-item">
+      <label>
+        <input type="checkbox" id="mop-per-chat" class="mop-checkbox">
+        <span>Enable Per-Chat Overrides</span>
+      </label>
+    </div>
+
+    <div id="mop-chat-overrides" class="mop-chat-overrides" style="display:none;">
+      <div class="mop-chat-item">
+        <span class="mop-chat-name">Current Chat:</span>
+        <span id="mop-current-chat-name" class="mop-chat-value">-</span>
+        <button id="mop-save-chat-override" class="mop-btn mop-btn-sm">Save Override</button>
+      </div>
+      
+      <div class="mop-chat-setting">
+        <label>
+          <span>Override Threshold:</span>
+          <input type="range" id="mop-chat-threshold" min="5" max="30" value="12" class="mop-slider">
+          <span id="mop-chat-threshold-value" class="mop-slider-value">12</span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <!-- Theme Support -->
+  <div class="mop-section">
+    <h4>🎨 Theme Support</h4>
+    
+    <div class="mop-setting-item">
+      <label>
+        <input type="checkbox" id="mop-theme-detect" class="mop-checkbox">
+        <span>Auto-detect Current Theme</span>
+      </label>
+      <p class="mop-hint">Apply theme-specific optimizations</p>
+    </div>
+
+    <div class="mop-setting-item">
+      <label>
+        <span class="mop-label-text">Current Theme:</span>
+        <span id="mop-current-theme" class="mop-theme-value">-</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Advanced Settings -->
+  <div class="mop-section">
+    <h4>🔧 Advanced Settings</h4>
+    
+    <div class="mop-setting-item">
+      <label>
+        <input type="checkbox" id="mop-aggressive-css" class="mop-checkbox">
+        <span>Aggressive CSS Stripping</span>
+      </label>
+      <p class="mop-hint">Remove backdrop-filter, box-shadow, and heavy effects</p>
+    </div>
+
+    <div class="mop-setting-item">
+      <label>
+        <input type="checkbox" id="mop-debug" class="mop-checkbox">
+        <span>Debug Mode</span>
+      </label>
+      <p class="mop-hint">Show detailed logs in console (may impact performance)</p>
+    </div>
+  </div>
+
+  <!-- Export/Import -->
+  <div class="mop-section">
+    <h4>💾 Export / Import Settings</h4>
+    
+    <div class="mop-export-import">
+      <button id="mop-export" class="mop-btn mop-btn-secondary">📤 Export Settings</button>
+      <button id="mop-import" class="mop-btn mop-btn-secondary">📥 Import Settings</button>
+      <input type="file" id="mop-import-file" accept=".json" style="display:none;">
+    </div>  </div>
+
+  <!-- Action Buttons -->
+  <div class="mop-section mop-actions">
+    <button id="mop-apply" class="mop-btn mop-btn-primary">✅ Apply Settings</button>
+    <button id="mop-reset" class="mop-btn mop-btn-secondary">🔄 Reset to Defaults</button>
+  </div>
+</div>
