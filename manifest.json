@@ -6,7 +6,7 @@
   "js": "index.js",
   "css": "style.css",
   "author": "meowlin007",
-  "version": "1.0.0",
-  "homePage": "https://github.com/meowlin007/mobile-optimizer-pro",
-  "auto_update": true
+  "version": "2.0.0",
+  "homePage": "https://github.com/meowlin007/ST-Mobile-Optimizer-Pro",
+  "auto_update": false
 }
