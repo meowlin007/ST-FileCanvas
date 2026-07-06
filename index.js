@@ -83,6 +83,20 @@ function guessFilename(lang, content, index) {
   return `file_canvas_${index}.${ext}`;
 }
 
+// ---------- SVG icons (ไม่ใช้ emoji) ----------
+const ICONS = {
+  eye: `<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>`,
+  save: `<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>`,
+  copy: `<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
+  close: `<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+  paperclip: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>`,
+  file: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
+};
+
+function iconLabel(iconKey, label) {
+  return `<span class="fc-icon">${ICONS[iconKey]}</span><span class="fc-label">${label}</span>`;
+}
+
 function downloadFile(filename, content) {
   const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
   const url = URL.createObjectURL(blob);
@@ -112,7 +126,7 @@ function openPreviewPopup(filename, content, onSaveAs) {
 
   const closeBtn = document.createElement("button");
   closeBtn.className = "fc-btn fc-btn-icon";
-  closeBtn.textContent = "✕";
+  closeBtn.innerHTML = ICONS.close;
   closeBtn.onclick = () => overlay.remove();
 
   header.appendChild(title);
@@ -128,16 +142,19 @@ function openPreviewPopup(filename, content, onSaveAs) {
 
   const copyBtn = document.createElement("button");
   copyBtn.className = "fc-btn";
-  copyBtn.textContent = "คัดลอก";
+  copyBtn.innerHTML = iconLabel("copy", "คัดลอก");
   copyBtn.onclick = async () => {
     await navigator.clipboard.writeText(body.value);
-    copyBtn.textContent = "คัดลอกแล้ว ✓";
-    setTimeout(() => (copyBtn.textContent = "คัดลอก"), 1200);
+    const labelEl = copyBtn.querySelector(".fc-label");
+    if (labelEl) labelEl.textContent = "คัดลอกแล้ว";
+    setTimeout(() => {
+      if (labelEl) labelEl.textContent = "คัดลอก";
+    }, 1200);
   };
 
   const saveBtn = document.createElement("button");
   saveBtn.className = "fc-btn fc-btn-primary";
-  saveBtn.textContent = "💾 บันทึกไฟล์";
+  saveBtn.innerHTML = iconLabel("save", "บันทึกไฟล์");
   saveBtn.onclick = () => {
     downloadFile(title.value || filename, body.value);
     if (onSaveAs) onSaveAs(title.value, body.value);
@@ -162,19 +179,26 @@ function openPreviewPopup(filename, content, onSaveAs) {
 function attachButtonsToMessage(messageEl) {
   if (!messageEl || messageEl.dataset.fcProcessed === "1") return;
 
+  // สำคัญ: querySelector "pre > code" เท่านั้น — นี่คือ fenced code block
+  // (สร้างจาก ```lang ... ``` เท่านั้น) SillyTavern's markdown parser จะไม่ห่อ
+  // inline code (single backtick `like this`) ด้วย <pre> เด็ดขาด มันจะได้แค่
+  // <code> เดี่ยวๆ ลอยอยู่ในข้อความ ดังนั้น querySelector นี้ปลอดภัยอยู่แล้ว
+  // แต่เราเพิ่มเช็คซ้ำอีกชั้นกันเหนียว: ต้องมี parentElement เป็น <pre> จริงๆ เท่านั้น
   const pres = messageEl.querySelectorAll("pre > code");
-  if (pres.length === 0) return;
+  if (pres.length === 0) {
+    messageEl.dataset.fcProcessed = "1";
+    return;
+  }
 
   let index = 0;
   pres.forEach((codeEl) => {
     const pre = codeEl.parentElement;
+    if (!pre || pre.tagName !== "PRE") return; // กันเหนียว: ต้องเป็น <pre> จริงเท่านั้น
     if (pre.dataset.fcDone === "1") return;
     pre.dataset.fcDone = "1";
     index += 1;
 
     const content = codeEl.innerText;
-    // ข้ามบล็อกสั้นเกินไป (โค้ดตัวอย่าง 1 บรรทัด ไม่ต้องมีปุ่ม)
-    if (content.trim().split("\n").length < 2 && content.length < 40) return;
 
     const langMatch = [...codeEl.classList]
       .map((c) => c.replace("language-", ""))
@@ -187,16 +211,16 @@ function attachButtonsToMessage(messageEl) {
 
     const nameSpan = document.createElement("span");
     nameSpan.className = "fc-filename";
-    nameSpan.textContent = filename;
+    nameSpan.innerHTML = `<span class="fc-icon">${ICONS.file}</span>${filename}`;
 
     const previewBtn = document.createElement("button");
     previewBtn.className = "fc-mini-btn";
-    previewBtn.textContent = "👁 ดู";
+    previewBtn.innerHTML = iconLabel("eye", "ดู");
     previewBtn.onclick = () => openPreviewPopup(filename, content);
 
     const saveBtn = document.createElement("button");
     saveBtn.className = "fc-mini-btn fc-mini-btn-primary";
-    saveBtn.textContent = "💾 บันทึก";
+    saveBtn.innerHTML = iconLabel("save", "บันทึก");
     saveBtn.onclick = () => downloadFile(filename, content);
 
     toolbar.appendChild(nameSpan);
@@ -232,7 +256,7 @@ function buildUploadUI() {
   const label = document.createElement("label");
   label.className = "fc-upload-label";
   label.title = "แนบไฟล์ให้ AI แก้ไข";
-  label.textContent = "📎";
+  label.innerHTML = ICONS.paperclip;
 
   const input = document.createElement("input");
   input.type = "file";
@@ -245,7 +269,7 @@ function buildUploadUI() {
 
   const clearBtn = document.createElement("span");
   clearBtn.className = "fc-upload-clear";
-  clearBtn.textContent = "✕";
+  clearBtn.innerHTML = ICONS.close;
   clearBtn.style.display = "none";
   clearBtn.onclick = () => {
     attachedFile = null;
@@ -259,7 +283,7 @@ function buildUploadUI() {
     if (!file) return;
     const text = await file.text();
     attachedFile = { name: file.name, content: text };
-    badge.textContent = `📄 ${file.name}`;
+    badge.innerHTML = `<span class="fc-icon">${ICONS.file}</span>${file.name}`;
     badge.style.display = "inline-block";
     clearBtn.style.display = "inline-block";
   });
